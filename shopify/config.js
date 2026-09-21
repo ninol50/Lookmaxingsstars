@@ -12,38 +12,18 @@ window.LMS_CONFIG = {
   currency: 'EUR',
 
   offers: {
-    protocole: {
-      variantId: '60903596360014',
-      title: 'Protocole Lookmax 90 Jours',
-      price: 47,
-      compareAt: 97
-    },
-    skin: {
-      variantId: '60903597211982',
-      title: 'Skin & Grooming Blueprint',
-      price: 27,
-      compareAt: 47
-    },
-    style: {
-      variantId: '60903597506894',
-      title: 'Style & Silhouette — Guide Morphologie',
-      price: 27,
-      compareAt: 47
+    marlglow: {
+      variantId: '60903719305550',
+      title: 'Méthode MARLglow — Technique complète',
+      price: 12
     }
   },
 
   bumps: {
-    photo: {
-      variantId: '60903597539662',
-      title: 'Pack Photo & Posture — 60 poses + réglages',
-      price: 17,
-      compareAt: 34
-    },
-    tracker: {
-      variantId: '60903597736270',
-      title: 'Tracker 90 Jours (Notion)',
-      price: 12,
-      compareAt: 24
+    pack: {
+      variantId: '60903720943950',
+      title: 'MARLglow Pack Complet',
+      price: 17
     }
   }
 };

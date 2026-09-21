@@ -1,4 +1,4 @@
-# Lookmaxing Stars — site de vente + boutique Shopify
+# MARLglow — site de vente + boutique Shopify
 
 Page de vente autonome (HTML/CSS/JS, zéro dépendance) branchée sur le checkout
 Shopify de `bdvvhu-wx.myshopify.com`. Paiement et livraison des fichiers gérés
@@ -47,22 +47,45 @@ python3 -m http.server 8099   # puis http://localhost:8099
 
 ---
 
-## Catalogue Shopify créé
+## Catalogue Shopify
 
-Collection : **Guides Lookmaxing** (`guides-lookmaxing`)
-
-| Produit | Prix | Prix barré | SKU | Variante |
+| Produit | Prix | SKU | Variante | Rôle |
 |---|---|---|---|---|
-| Protocole Lookmax 90 Jours | 47 € | 97 € | `LMS-PROTO-90` | `60903596360014` |
-| Skin & Grooming Blueprint | 27 € | 47 € | `LMS-SKIN-01` | `60903597211982` |
-| Style & Silhouette | 27 € | 47 € | `LMS-STYLE-01` | `60903597506894` |
-| Pack Photo & Posture *(bump)* | 17 € | 34 € | `LMS-BUMP-PHOTO` | `60903597539662` |
-| Tracker 90 Jours Notion *(bump)* | 12 € | 24 € | `LMS-BUMP-TRACK` | `60903597736270` |
+| Méthode MARLglow — Technique complète | 12 € | `MARL-CORE-12` | `60903719305550` | offre principale |
+| MARLglow Pack Complet | 17 € | `MARL-PACK-17` | `60903720943950` | order bump |
 
-Les cinq produits sont en **brouillon**. C'est volontaire : publier avant
-d'avoir attaché les fichiers ferait payer des clients pour un lien vide.
+Le Pack Complet ajoute le massage de peau sans produit et le tri des produits
+du marché. Coché sur la page, il monte le panier à **29 €** dans le même
+paiement.
 
----
+Les cinq produits de la première version (Protocole 90 Jours, Skin & Grooming,
+Style & Silhouette, Pack Photo, Tracker) sont toujours en brouillon dans
+l'admin. Ils ne sont plus référencés par le site : à archiver quand tu es sûr
+de ne pas les reprendre.
+
+Les deux produits actifs sont en **brouillon**. C'est volontaire : publier
+avant d'avoir attaché le contenu ferait payer des clients pour un accès vide.
+
+## Photos avant / après — à fournir
+
+La page contient trois comparateurs avant/après fonctionnels (curseur
+glissant, souris, tactile et clavier). Ils affichent aujourd'hui des gabarits :
+
+```
+assets/img/avant-1.svg   assets/img/apres-1.svg    (hero + résultat 1)
+assets/img/avant-2.svg   assets/img/apres-2.svg    (résultat 2)
+```
+
+Remplace ces quatre fichiers par de vraies photos, puis mets à jour les `src`
+dans `index.html` si tu changes l'extension. Format portrait 3:4, même
+cadrage, même lumière et même heure entre l'avant et l'après — sinon la
+comparaison ne vaut rien et se voit immédiatement.
+
+**Ces photos doivent être celles de vrais clients, avec leur accord écrit.**
+Des avant/après fabriqués ou récupérés ailleurs, présentés comme des
+résultats de la méthode, sont une pratique commerciale trompeuse
+(art. L121-2) et le motif de bannissement le plus fréquent des comptes
+publicitaires sur cette niche.
 
 ## Ce qu'il reste à faire, dans l'ordre
 

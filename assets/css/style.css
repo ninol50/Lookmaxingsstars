@@ -85,7 +85,14 @@ body::before {
   z-index: 1;
 }
 
-section { position: relative; z-index: 1; padding-block: 88px; }
+section {
+  position: relative;
+  z-index: 1;
+  padding-block: 88px;
+  /* La barre de navigation est collante : sans cette marge, cliquer une
+     ancre du menu place le titre derrière elle. */
+  scroll-margin-top: 66px;
+}
 
 @media (max-width: 720px) { section { padding-block: 60px; } }
 
@@ -307,158 +314,103 @@ p:last-child { margin-bottom: 0; }
 }
 .trust-row span { display: inline-flex; align-items: center; gap: 7px; }
 
-/* ---------- Mockups 3D (CSS transforms, pas des rendus photo) ---------- */
+/* ---------- Comparatif avant / après ---------- */
 
-.stage {
-  perspective: 1500px;
-  perspective-origin: 52% 42%;
+.compare-grid {
   display: grid;
-  place-items: center;
-  min-height: 430px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+@media (max-width: 760px) { .compare-grid { grid-template-columns: 1fr; } }
+
+/* Le curseur révèle l'image « après » en rognant sa largeur.
+   Les deux images se superposent en grille, jamais en absolu :
+   la hauteur suit donc naturellement le ratio de la photo. */
+/* La carte porte le cadre ; .compare ne contient que la zone image, pour
+   que la poignée ne déborde pas sur la légende. */
+.compare-card {
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--navy-900);
+  box-shadow: 0 30px 60px -24px rgba(0, 0, 0, .8);
 }
 
-.stack {
+.compare {
   position: relative;
-  transform-style: preserve-3d;
-  transform: rotateX(8deg) rotateY(-21deg);
-  animation: float 7s ease-in-out infinite;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  line-height: 0;
 }
 
-@keyframes float {
-  0%, 100% { transform: rotateX(8deg) rotateY(-21deg) translateY(0); }
-  50%      { transform: rotateX(8deg) rotateY(-17deg) translateY(-14px); }
+.compare-imgs { display: grid; }
+.compare-imgs > * { grid-area: 1 / 1; }
+.compare img { width: 100%; height: auto; display: block; pointer-events: none; }
+
+.compare-after {
+  /* Piloté par --pos (0 → 100) depuis le JS. */
+  clip-path: inset(0 calc(100% - var(--pos, 50%)) 0 0);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .stack { animation: none; }
-  html { scroll-behavior: auto; }
-}
-
-/* Un « livre » = couverture + tranche + épaisseur de pages, en 3D réelle. */
-.book {
-  position: relative;
-  width: 252px;
-  height: 344px;
-  transform-style: preserve-3d;
-  border-radius: 3px 8px 8px 3px;
-  background:
-    linear-gradient(118deg, rgba(255,255,255,.16) 0%, transparent 42%),
-    linear-gradient(160deg, var(--navy-600) 0%, var(--navy-800) 58%, var(--ink) 100%);
-  box-shadow:
-    0 44px 70px -22px rgba(0, 0, 0, .78),
-    0 0 0 1px rgba(255, 255, 255, .08) inset;
-  padding: 26px 24px;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Tranche : fine bande fluo rabattue vers l'arrière à gauche */
-.book::before {
-  content: '';
+.compare-tag {
   position: absolute;
-  top: 0; bottom: 0;
-  left: 0;
-  width: 19px;
-  transform: rotateY(-90deg);
-  transform-origin: left center;
-  background: linear-gradient(180deg, var(--fluo-deep), #7FA000 60%, #4E6400);
-  border-radius: 2px;
-}
-
-/* Épaisseur des pages, côté droit */
-.book::after {
-  content: '';
-  position: absolute;
-  top: 8px; bottom: 8px;
-  right: 0;
-  width: 9px;
-  transform: rotateY(90deg);
-  transform-origin: right center;
-  background: repeating-linear-gradient(
-    180deg,
-    #C3CEE2 0px, #C3CEE2 2px,
-    #8E9CB8 2px, #8E9CB8 3px
-  );
-  filter: brightness(.82);
-  border-radius: 1px;
-}
-
-/* Reflet vitré balayant la couverture */
-.book-sheen {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(104deg,
-    transparent 28%,
-    rgba(255,255,255,.13) 44%,
-    rgba(255,255,255,.02) 56%,
-    transparent 70%);
+  top: 14px;
+  /* .compare est en line-height 0 pour coller aux images : les pastilles
+     doivent retrouver une hauteur de ligne normale. */
+  line-height: 1.45;
+  font-size: .66rem;
+  font-weight: 800;
+  letter-spacing: .16em;
+  padding: 6px 12px;
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   pointer-events: none;
 }
+.compare-tag.before { left: 14px; background: rgba(8,14,28,.8); color: var(--muted); }
+.compare-tag.after  { right: 14px; background: var(--fluo); color: #0A1020; }
 
-.book-kicker {
-  font-size: .6rem;
-  font-weight: 800;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--fluo);
-  margin-bottom: auto;
+/* Poignée verticale */
+.compare-handle {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: var(--pos, 50%);
+  width: 3px;
+  margin-left: -1.5px;
+  background: var(--fluo);
+  box-shadow: 0 0 18px var(--fluo-glow);
+  cursor: ew-resize;
+  border: 0;
+  padding: 0;
 }
-.book-title {
-  font-family: var(--font-disp);
-  font-size: 1.62rem;
-  font-weight: 900;
-  line-height: 1.02;
-  letter-spacing: -0.035em;
-  margin: 0 0 10px;
+.compare-handle::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 44px; height: 44px;
+  margin: -22px 0 0 -22px;
+  border-radius: 50%;
+  background: var(--fluo);
+  box-shadow: 0 6px 20px -4px rgba(0,0,0,.7);
+  background-image:
+    linear-gradient(90deg, transparent 12px, #0A1020 12px, #0A1020 14px, transparent 14px),
+    linear-gradient(90deg, transparent 30px, #0A1020 30px, #0A1020 32px, transparent 32px);
 }
-.book-sub {
-  font-size: .72rem;
+
+.compare-caption {
+  padding: 16px 18px;
+  font-size: .86rem;
+  line-height: 1.55;
   color: var(--muted);
-  letter-spacing: .01em;
-  border-top: 1px solid rgba(147,166,206,.22);
-  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  background: rgba(7, 15, 38, .6);
 }
+.compare-caption strong { color: var(--paper); }
 
-/* Deux livres secondaires décalés en profondeur derrière le principal */
-.book-back {
-  position: absolute;
-  inset: 0;
-  border-radius: 3px 7px 7px 3px;
-  border-left: 6px solid var(--fluo-deep);
-  background:
-    linear-gradient(118deg, rgba(255,255,255,.07), transparent 40%),
-    linear-gradient(160deg, var(--navy-700), var(--navy-900));
-  box-shadow: 0 30px 50px -20px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.05) inset;
-}
-.book-back.b1 {
-  transform: translate3d(-26px, 14px, -46px) rotateY(4deg);
-  filter: brightness(.74);
-}
-.book-back.b2 {
-  transform: translate3d(-48px, 28px, -90px) rotateY(8deg);
-  filter: brightness(.5);
-  border-left-color: #6E8C00;
-}
-
-/* Ombre portée au sol */
-.stack-shadow {
-  position: absolute;
-  left: 50%;
-  bottom: -62px;
-  width: 300px;
-  height: 46px;
-  transform: translateX(-50%) translateZ(-90px) rotateX(74deg);
-  background: radial-gradient(ellipse at center, rgba(0,0,0,.72), transparent 70%);
-  filter: blur(16px);
-}
-
-/* Pastille de prix qui flotte devant la pile */
+/* Pastille de prix, reprise du hero */
 .price-tag {
-  position: absolute;
-  right: -34px;
-  top: -26px;
-  transform: translateZ(80px) rotate(7deg);
+  display: inline-block;
   background: var(--fluo);
   color: #0A1020;
   font-family: var(--font-disp);
@@ -468,7 +420,6 @@ p:last-child { margin-bottom: 0; }
   padding: 13px 19px;
   border-radius: 13px;
   box-shadow: 0 16px 34px -8px var(--fluo-glow);
-  text-align: center;
   line-height: 1.1;
 }
 .price-tag em {
@@ -482,11 +433,66 @@ p:last-child { margin-bottom: 0; }
   opacity: .72;
 }
 
-@media (max-width: 560px) {
-  .stage { min-height: 360px; perspective: 1100px; }
-  .book { width: 205px; height: 282px; padding: 20px 18px; }
-  .book-title { font-size: 1.3rem; }
-  .price-tag { right: -14px; font-size: 1.12rem; padding: 10px 15px; }
+/* ---------- Avis clients ---------- */
+
+.reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+@media (max-width: 940px) { .reviews { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 620px) { .reviews { grid-template-columns: 1fr; } }
+
+.review {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stars { display: flex; gap: 3px; color: var(--fluo); font-size: .95rem; letter-spacing: 1px; }
+
+.review blockquote { margin: 0; }
+.review p { font-size: .96rem; margin: 0; }
+
+.review-who {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.review-avatar {
+  width: 34px; height: 34px;
+  flex: 0 0 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-disp);
+  font-weight: 900;
+  font-size: .9rem;
+  color: #0A1020;
+  background: linear-gradient(140deg, var(--fluo), var(--fluo-deep));
+}
+.review-name { font-weight: 700; font-size: .9rem; line-height: 1.2; }
+.review-meta { font-size: .73rem; color: var(--muted-dim); }
+
+.reviews-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 18px;
+  margin-bottom: 34px;
+  font-size: .92rem;
+  color: var(--muted);
+}
+.reviews-summary .score {
+  font-family: var(--font-disp);
+  font-weight: 900;
+  font-size: 2rem;
+  color: var(--fluo);
+  letter-spacing: -0.03em;
 }
 
 /* ---------- Cartes génériques ---------- */
@@ -538,26 +544,27 @@ p:last-child { margin-bottom: 0; }
 
 .deliverable {
   display: grid;
-  grid-template-columns: 96px 1fr;
+  grid-template-columns: 84px 1fr;
   gap: 22px;
   align-items: start;
 }
 
-.mini-book {
-  width: 96px;
-  height: 128px;
-  border-radius: 3px 7px 7px 3px;
+.step-badge {
+  width: 84px;
+  height: 84px;
+  border-radius: 20px;
   background:
-    linear-gradient(120deg, rgba(255,255,255,.14), transparent 45%),
+    linear-gradient(140deg, rgba(216,255,43,.16), transparent 55%),
     linear-gradient(160deg, var(--navy-600), var(--navy-800));
-  border-left: 5px solid var(--fluo);
-  box-shadow: 0 16px 30px -12px rgba(0,0,0,.8);
+  border: 1px solid rgba(216, 255, 43, .3);
+  box-shadow: 0 16px 30px -14px rgba(0,0,0,.8);
   display: grid;
   place-items: center;
   font-family: var(--font-disp);
   font-weight: 900;
-  font-size: 1.85rem;
-  color: rgba(238, 243, 255, .3);
+  font-size: 1.7rem;
+  letter-spacing: -0.04em;
+  color: var(--fluo);
 }
 
 @media (max-width: 480px) {
