@@ -34,7 +34,8 @@ mentions-legales.html   \
 cgv.html                 > à compléter, champs [ENTRE CROCHETS] obligatoires
 confidentialite.html    /
 shopify/config.js       IDs de variantes, prix — source de vérité
-assets/css/style.css    feuille unique, palette bleu nuit + jaune fluo
+assets/css/base.css      jetons, base, typo, boutons, nav, hero
+assets/css/components.css composants (dépend de base.css, chargé après)
 assets/js/checkout.js   order bumps, total dynamique, permalien, barre mobile
 vercel.json             cleanUrls + cache assets + en-têtes de sécurité
 ```
