@@ -83,7 +83,8 @@
   function goToCheckout(event) {
     event.preventDefault();
 
-    var base = cfg.offers[offerEl ? offerEl.dataset.offer : 'protocole'];
+    if (!offerEl) return;
+    var base = cfg.offers[offerEl.dataset.offer];
     if (!base) return;
 
     var ids = [base.variantId].concat(
@@ -116,8 +117,8 @@
     function (el) {
       var direct = el.dataset.checkout;
 
-      // Un bouton avec `data-checkout="skin"` part sur cette offre seule ;
-      // `data-checkout=""` reprend l'offre principale et ses bumps cochés.
+      // Un bouton avec `data-checkout="<clé>"` part sur cette offre seule ;
+      // `data-checkout` vide reprend l'offre principale et ses bumps cochés.
       if (direct) {
         var offer = cfg.offers[direct] || cfg.bumps[direct];
         if (offer) el.href = buildCheckoutUrl([offer.variantId]);
