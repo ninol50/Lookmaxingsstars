@@ -20,12 +20,15 @@
     return;
   }
 
-  var euro = new Intl.NumberFormat('fr-FR', {
-    style: 'currency',
-    currency: cfg.currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2
-  });
+  function money(value) {
+    var hasCents = Math.round(value * 100) % 100 !== 0;
+    return new Intl.NumberFormat(document.documentElement.lang || 'fr-FR', {
+      style: 'currency',
+      currency: cfg.currency,
+      minimumFractionDigits: hasCents ? 2 : 0,
+      maximumFractionDigits: hasCents ? 2 : 0
+    }).format(value);
+  }
 
   /* ----- Construction du permalien ----- */
 
@@ -54,6 +57,21 @@
     }, base.price);
   }
 
+  /**
+   * Un palier qui contient déjà un autre décoche celui-ci. Sans ça, un
+   * acheteur peut cocher les deux et payer deux fois le même contenu.
+   */
+  function enforceExclusivity(changed) {
+    if (!offerEl || !changed.checked) return;
+    var bump = cfg.bumps[changed.dataset.bump];
+    if (!bump || !bump.excludes) return;
+
+    bump.excludes.forEach(function (key) {
+      var other = offerEl.querySelector('[data-bump="' + key + '"]');
+      if (other) other.checked = false;
+    });
+  }
+
   function refreshOffer() {
     if (!offerEl) return;
 
@@ -62,9 +80,15 @@
 
     var total = currentTotal(base);
 
+    // Le rappel « paie avec la même adresse » ne concerne que les paliers
+    // qui ouvrent un accès nominatif.
+    var needsAccess = selectedBumps().some(function (bump) { return bump.grantsAccess; });
+    var notice = document.querySelector('[data-access-notice]');
+    if (notice) notice.hidden = !needsAccess;
+
     // Total affiché
     var totalEl = offerEl.querySelector('[data-total]');
-    if (totalEl) totalEl.textContent = euro.format(total);
+    if (totalEl) totalEl.textContent = money(total);
 
     // État visuel de chaque ligne de bump
     Array.prototype.forEach.call(offerEl.querySelectorAll('[data-bump]'), function (input) {
@@ -73,11 +97,11 @@
 
     // Libellé du bouton principal
     var btnPrice = offerEl.querySelector('[data-btn-price]');
-    if (btnPrice) btnPrice.textContent = euro.format(total);
+    if (btnPrice) btnPrice.textContent = money(total);
 
     // Barre mobile
     var sbPrice = document.querySelector('[data-sticky-price]');
-    if (sbPrice) sbPrice.textContent = euro.format(total);
+    if (sbPrice) sbPrice.textContent = money(total);
   }
 
   function goToCheckout(event) {
@@ -103,9 +127,15 @@
     window.location.href = buildCheckoutUrl(ids);
   }
 
+  // La traduction reecrit des blocs entiers et change la locale : les prix
+  // formates doivent etre reinjectes apres chaque changement de langue.
+  document.addEventListener('lms:langchange', refreshOffer);
+
   if (offerEl) {
     offerEl.addEventListener('change', function (event) {
-      if (event.target.matches('[data-bump]')) refreshOffer();
+      if (!event.target.matches('[data-bump]')) return;
+      enforceExclusivity(event.target);
+      refreshOffer();
     });
     refreshOffer();
   }

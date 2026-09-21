@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mon accès — MARLglow</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#080C15">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="shell nav-inner">
+    <a class="logo" href="index.html"><span class="logo-dot"></span><span>MARL<span class="hl">GLOW</span></span></a>
+    <a class="btn btn-ghost" href="index.html">Retour à la boutique</a>
+  </div>
+</nav>
+
+<section>
+  <div class="shell doc">
+
+    <!-- ============ ACHETEUR ============ -->
+    <h1>J'ai payé, je veux mon accès</h1>
+    <p class="lead">
+      L'accès à l'outil d'essayage est nominatif. Il est rattaché à l'adresse
+      e-mail utilisée pour le paiement.
+    </p>
+
+    <p class="warn">
+      <span aria-hidden="true">&#9888;&#65039;</span>
+      <span>
+        <strong>Indique exactement la même adresse e-mail que celle de ton paiement.</strong>
+        C'est le seul lien entre ta commande et ton accès. Avec une autre
+        adresse, la demande ne peut pas être rattachée et sera refusée.
+      </span>
+    </p>
+
+    <form class="panel" id="request-form" novalidate>
+      <label class="field">
+        <span class="field-label">Adresse e-mail du paiement</span>
+        <input type="email" name="email" autocomplete="email" required
+               placeholder="celle utilisée au checkout">
+      </label>
+
+      <label class="field">
+        <span class="field-label">Numéro de commande <span class="dim">(optionnel, accélère la vérification)</span></span>
+        <input type="text" name="order" autocomplete="off" placeholder="#1234">
+      </label>
+
+      <button class="btn btn-primary btn-full" type="submit">Demander mon accès</button>
+      <p class="form-msg" data-msg hidden></p>
+    </form>
+
+    <h2>Vérifier où en est ma demande</h2>
+    <form class="panel" id="status-form" novalidate>
+      <label class="field">
+        <span class="field-label">Adresse e-mail</span>
+        <input type="email" name="email" autocomplete="email" required>
+      </label>
+      <button class="btn btn-ghost btn-full" type="submit">Vérifier l'état</button>
+      <p class="form-msg" data-msg hidden></p>
+    </form>
+
+    <!-- ============ CRÉATEUR ============ -->
+    <hr class="sep" id="createur">
+
+    <h2>Espace créateur</h2>
+    <p class="tiny">
+      Réservé à l'exploitant de la boutique. Le code est vérifié côté serveur :
+      il n'est pas présent dans cette page.
+    </p>
+
+    <form class="panel" id="creator-login" novalidate>
+      <label class="field">
+        <span class="field-label">Code créateur</span>
+        <input type="password" name="passcode" autocomplete="current-password" required>
+      </label>
+      <button class="btn btn-primary btn-full" type="submit">Ouvrir la session</button>
+      <p class="form-msg" data-msg hidden></p>
+    </form>
+
+    <div id="creator-panel" hidden>
+      <div class="panel-head">
+        <h3 style="margin:0">Demandes</h3>
+        <button class="btn btn-ghost" type="button" data-refresh>Rafraîchir</button>
+      </div>
+      <div id="requests"></div>
+      <p class="form-msg" data-creator-msg hidden></p>
+    </div>
+
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="shell">
+    <div class="foot-links" style="margin-bottom:20px">
+      <a href="mentions-legales.html">Mentions légales</a>
+      <a href="cgv.html">CGV</a>
+      <a href="confidentialite.html">Confidentialité</a>
+    </div>
+    <p class="tiny">© <span data-year>2026</span> MARLglow.</p>
+  </div>
+</footer>
+
+<script src="assets/js/acces.js"></script>
+<script>document.querySelectorAll('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });</script>
+</body>
+</html>

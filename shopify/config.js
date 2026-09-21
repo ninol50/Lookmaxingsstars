@@ -19,11 +19,26 @@ window.LMS_CONFIG = {
     }
   },
 
+  /**
+   * Les deux paliers se recouvrent : le Pack Créateur contient déjà tout le
+   * Pack Complet. Ils sont donc exclusifs — `excludes` dit lequel décocher
+   * pour qu'un acheteur ne paie jamais deux fois le même contenu.
+   */
   bumps: {
     pack: {
       variantId: '60903720943950',
       title: 'MARLglow Pack Complet',
-      price: 17
+      price: 17,
+      excludes: ['createur']
+    },
+    createur: {
+      variantId: '60904414806350',
+      title: 'MARLglow Pack Créateur',
+      price: 47.5,
+      excludes: ['pack'],
+      // Ce palier ouvre un accès nominatif : l'acheteur doit le demander
+      // après paiement avec l'e-mail de sa commande.
+      grantsAccess: true
     }
   }
 };

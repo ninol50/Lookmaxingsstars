@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800" role="img" aria-label="Gabarit APRES">
   <defs>
     <linearGradient id="bg-apres-1.svg" x1="0" y1="0" x2="0.4" y2="1">
-      <stop offset="0" stop-color="#12305E"/>
-      <stop offset="1" stop-color="#060E24"/>
+      <stop offset="0" stop-color="#1A2740"/>
+      <stop offset="1" stop-color="#0C1220"/>
     </linearGradient>
     <radialGradient id="glow-apres-1.svg" cx="0.5" cy="0.34" r="0.55">
-      <stop offset="0" stop-color="#D8FF2B" stop-opacity="0.5"/>
-      <stop offset="1" stop-color="#D8FF2B" stop-opacity="0"/>
+      <stop offset="0" stop-color="#5289DE" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#5289DE" stop-opacity="0"/>
     </radialGradient>
   </defs>
 
@@ -14,13 +14,13 @@
   <rect width="600" height="800" fill="url(#glow-apres-1.svg)"/>
 
   <!-- Silhouette generique. Ce fichier est un gabarit : le remplacer par une vraie photo. -->
-  <g fill="#2E5FA8">
+  <g fill="#2F4A78">
     <circle cx="300" cy="286" r="112"/>
     <path d="M300 420c-114 0-206 79-206 177v203h412V597c0-98-92-177-206-177z"/>
   </g>
 
   <text x="300" y="770" text-anchor="middle" font-family="Inter, Arial, sans-serif"
-        font-size="19" font-weight="600" fill="#7C8CB0" letter-spacing="1">
+        font-size="19" font-weight="600" fill="#7E8CA4" letter-spacing="1">
     Gabarit APRES — remplacer par une vraie photo
   </text>
 </svg>
